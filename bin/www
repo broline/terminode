@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+
+//set DEBUG=myapp & node .\bin\www
 var debug = require('debug')('terminode');
 var app = require('../app');
 
