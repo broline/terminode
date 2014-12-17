@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: '$$appname$$' });
+  res.render('index', { title: 'terminode' });
 });
 
 module.exports = router;
