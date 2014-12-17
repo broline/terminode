@@ -1,1 +1,4 @@
-console.log('\'Allo \'Allo!');
+define([], function() {
+
+
+});

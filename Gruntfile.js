@@ -50,7 +50,6 @@ module.exports = function(grunt) {
             },
             styles: {
                 files: ['<%= config.app %>/styles/{,*/}*.css'],
-                tasks: ['newer:copy:styles', 'autoprefixer']
             },
             livereload: {
                 options: {
@@ -169,154 +168,30 @@ module.exports = function(grunt) {
             }
         },
 
-        // Renames files for browser caching purposes
-        rev: {
-            dist: {
-                files: {
-                    src: [
-                        '<%= config.dist %>/scripts/**/*.js',
-                        '<%= config.dist %>/styles/**/*.css',
-                        '<%= config.dist %>/images/**/*.*',
-                        '<%= config.dist %>/styles/fonts/**/*.*',
-                        '<%= config.dist %>/*.{ico,png}'
-                    ]
-                }
-            }
-        },
-
-        // Reads HTML for usemin blocks to enable smart builds that automatically
-        // concat, minify and revision files. Creates configurations in memory so
-        // additional tasks can operate on them
-        useminPrepare: {
-            options: {
-                dest: '<%= config.dist %>'
-            },
-            html: '<%= config.webApp %>/index.html'
-        },
-
-        // Performs rewrites based on rev and the useminPrepare configuration
-        usemin: {
-            options: {
-                assetsDirs: [
-                    '<%= config.dist %>',
-                    '<%= config.dist %>/images',
-                    '<%= config.dist %>/styles'
-                ]
-            },
-            html: ['<%= config.dist %>/**/*.html'],
-            css: ['<%= config.dist %>/styles/**/*.css']
-        },
-
-        // The following *-min tasks produce minified files in the dist folder
-        imagemin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.webApp %>/images',
-                    src: '**/*.{gif,jpeg,jpg,png}',
-                    dest: '<%= config.dist %>/images'
-                }]
-            }
-        },
-
-        svgmin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.webApp %>/images',
-                    src: '**/*.svg',
-                    dest: '<%= config.dist %>/images'
-                }]
-            }
-        },
-
-        htmlmin: {
-            dist: {
-                options: {
-                    collapseBooleanAttributes: true,
-                    collapseWhitespace: true,
-                    conservativeCollapse: true,
-                    removeAttributeQuotes: true,
-                    removeCommentsFromCDATA: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.dist %>',
-                    src: '**/*.html',
-                    dest: '<%= config.dist %>'
-                }]
-            }
-        },
-
-        // Copies remaining files to places other tasks can use
-        copy: {
-            dist: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= config.webApp %>',
-                    dest: '<%= config.dist %>',
-                    src: [
-                        '*.{ico,png,txt}',
-                        'images/**/*.webp',
-                        '**/*.html',
-                        'styles/fonts/**/*.*'
-                    ]
-                }, {
-                    expand: true,
-                    dot: true,
-                    cwd: '.',
-                    src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-                    dest: '<%= config.dist %>'
-                }]
-            },
-            styles: {
-                expand: true,
-                dot: true,
-                cwd: '<%= config.webApp %>/styles',
-                dest: '.tmp/styles/',
-                src: '**/*.css'
-            }
-        },
-
-        // Generates a custom Modernizr build that includes only the tests you
-        // reference in your webApp
-        modernizr: {
-            dist: {
-                devFile: 'bower_components/modernizr/modernizr.js',
-                outputFile: '<%= config.dist %>/scripts/vendor/modernizr.js',
-                files: {
-                    src: [
-                        '<%= config.dist %>/scripts/**/*.js',
-                        '<%= config.dist %>/styles/**/*.css',
-                        '!<%= config.dist %>/scripts/vendor/*'
-                    ]
-                },
-                uglify: true
-            }
-        },
-
         // Run some tasks in parallel to speed up build process
         concurrent: {
             server: [
                 'sass:server',
-                'copy:styles'
             ],
             test: [
-                'copy:styles'
             ],
             dist: [
-                'sass',
-                'copy:styles',
-                'imagemin',
-                'svgmin'
+                'sass'
             ]
+        },
+
+        requirejs: {
+            compile: {
+                options: {
+                    baseUrl: '<%= config.webApp %>',
+                    mainConfigFile: '<%= config.webApp %>/scripts/config.js',
+                    out: '<%= config.dist %>/optimized.js'
+                }
+            }
         }
     });
+
+
 
 
     grunt.registerTask('serve', 'start the server and preview your webApp, --allow-remote for remote access', function(target) {
@@ -356,16 +231,10 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'useminPrepare',
         'concurrent:dist',
         'concat',
         'cssmin',
-        'uglify',
-        'copy:dist',
-        'modernizr',
-        'rev',
-        'usemin',
-        'htmlmin'
+        'uglify'
     ]);
 
     grunt.registerTask('default', [
