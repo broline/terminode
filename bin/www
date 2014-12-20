@@ -1,5 +1,5 @@
 
-//set DEBUG=myapp & node .\bin\www
+//set DEBUG=terminode & node .\bin\www
 var debug = require('debug')('terminode');
 var app = require('../app');
 
