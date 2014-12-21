@@ -1,4 +1,4 @@
-var require = (function (root) {
+var requireConfig = (function (root) {
 
   var cfg = {
     baseUrl: "../",
@@ -25,5 +25,5 @@ var require = (function (root) {
 })(this);
 
 if (typeof (exports) === "object") {
-  module.exports = require;
+  module.exports = requireConfig;
 }

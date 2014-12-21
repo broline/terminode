@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var merge = require('merge');
 
 var routes = require('./routes/index');
 
@@ -13,7 +12,7 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'html') //# use .html extension for templates
+app.set('view engine', 'html'); //# use .html extension for templates
 app.set('layout', './layouts/base'); //# use layout.html as the default layout
 //app.set 'partials', foo: 'foo'   //# define partials available to all pages
 app.enable('view cache');
@@ -34,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
     res.locals = {
         app: {
-            env: process.env.NODE_ENV == "production" ? "prod" : "dev"
+            env: process.env.NODE_ENV === "production" ? "prod" : "dev"
         }
     };
     next();

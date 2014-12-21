@@ -29,37 +29,31 @@ module.exports = function(grunt) {
         // Project settings
         config: config,
 
-        watch: {
-            bower: {
-                files: ['bower.json'],
-                tasks: ['wiredep']
+        // Make sure code styles are up to par and there are no obvious mistakes
+        jshint: {
+            options: {
+                jshintrc: '.jshintrc',
+                reporter: require('jshint-stylish')
             },
+            all: [
+                '*.js',
+                '*.json',
+                '<%= config.webApp %>/**/*.js',
+                '<%= config.webApp %>/**/*.json'
+            ]
+        },
+
+        watch: {
             js: {
-                files: ['<%= config.app %>/scripts/{,*/}*.js'],
+                files: [ '<%= jshint.all %>' ],
                 tasks: ['jshint'],
                 options: {
                     livereload: true
                 }
             },
-            jstest: {
-                files: ['test/spec/{,*/}*.js'],
-                tasks: ['test:watch']
-            },
-            gruntfile: {
-                files: ['Gruntfile.js']
-            },
-            styles: {
-                files: ['<%= config.app %>/styles/{,*/}*.css'],
-            },
-            livereload: {
-                options: {
-                    livereload: '<%= connect.options.livereload %>'
-                },
-                files: [
-                    '<%= config.app %>/{,*/}*.html',
-                    '.tmp/styles/{,*/}*.css',
-                    '<%= config.app %>/images/{,*/}*'
-                ]
+            sass: {
+                files: ['<%= config.webApp %>/styles/**/*.scss'],
+                tasks: ['sass:dev']
             }
         },
         // The actual grunt server settings
@@ -124,20 +118,6 @@ module.exports = function(grunt) {
                     ]
                 }]
             }
-        },
-
-        // Make sure code styles are up to par and there are no obvious mistakes
-        jshint: {
-            options: {
-                jshintrc: '.jshintrc',
-                reporter: require('jshint-stylish')
-            },
-            all: [
-                'Gruntfile.js',
-                '<%= config.webApp %>/scripts/**/*.js',
-                '!<%= config.webApp %>/scripts/vendor/*',
-                'test/spec/**/*.js'
-            ]
         },
 
         // Mocha testing framework configuration options
