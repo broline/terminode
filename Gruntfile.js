@@ -110,13 +110,20 @@ module.exports = function(grunt) {
                 files: [{
                     dot: true,
                     src: [
-                        '.tmp',
                         '<%= config.dist %>/*',
                         '!<%= config.dist %>/.git*'
                     ]
                 }]
             },
-            server: '.tmp'
+            dev: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '<%= config.dist %>/*',
+                        '!<%= config.dist %>/.git*'
+                    ]
+                }]
+            }
         },
 
         // Make sure code styles are up to par and there are no obvious mistakes
@@ -138,7 +145,7 @@ module.exports = function(grunt) {
             all: {
                 options: {
                     run: true,
-                    urls: ['http://<%= connect.test.options.hostname %>:<%= connect.test.options.port %>/index.html']
+                    urls: ['http://<%= connect.test.options.hostname %>:<%= connect.test.options.port %>/']
                 }
             }
         },
@@ -146,53 +153,37 @@ module.exports = function(grunt) {
         // Compiles Sass to CSS and generates necessary files if requested
         sass: {
             options: {
-                loadPath: 'bower_components'
+                style: 'compressed',
+                loadPath: 'bower_components/bootstrap-sass-official/assets/stylesheets/',
+                trace: true
             },
             dist: {
                 files: [{
-                    expand: true,
-                    cwd: '<%= config.webApp %>/styles',
-                    src: ['*.{scss,sass}'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
+                    '<%= config.webApp %>/dist/css/main.css': '<%= config.webApp %>/styles/dist.scss',
                 }]
             },
-            server: {
+            dev: {
+                options: {
+
+                },
                 files: [{
-                    expand: true,
-                    cwd: '<%= config.webApp %>/styles',
-                    src: ['*.{scss,sass}'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
+                    '<%= config.webApp %>/dev/css/main.css': '<%= config.webApp %>/styles/main.scss',
+                    '<%= config.webApp %>/dev/css/bootstrap.css': '<%= config.webApp %>/styles/bootstrap-custom.scss'
                 }]
             }
         },
 
-        // Run some tasks in parallel to speed up build process
-        concurrent: {
-            server: [
-                'sass:server',
-            ],
-            test: [
-            ],
-            dist: [
-                'sass'
-            ]
-        },
-
-        requirejs: {
-            compile: {
+        nodemon: {
+            dev: {
+                script: './bin/www',
                 options: {
-                    baseUrl: '<%= config.webApp %>',
-                    mainConfigFile: '<%= config.webApp %>/scripts/config.js',
-                    out: '<%= config.dist %>/optimized.js'
+                  args: ['NODE_ENV=development']
                 }
             }
         }
     });
 
-
-
+    grunt.loadNpmTasks('grunt-nodemon');
 
     grunt.registerTask('serve', 'start the server and preview your webApp, --allow-remote for remote access', function(target) {
         if (grunt.option('allow-remote')) {
@@ -203,8 +194,9 @@ module.exports = function(grunt) {
         }
 
         grunt.task.run([
-            'clean:server',
-            'concurrent:server',
+            'jshint',
+            'clean:dist',
+            'sass:dist',
             'connect:livereload',
             'watch'
         ]);
@@ -217,10 +209,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', function(target) {
         if (target !== 'watch') {
-            grunt.task.run([
-                'clean:server',
-                'concurrent:test'
-            ]);
+
         }
 
         grunt.task.run([
@@ -230,16 +219,21 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('build', [
+        'jshint',
         'clean:dist',
-        'concurrent:dist',
-        'concat',
-        'cssmin',
-        'uglify'
+        'sass:dist'
+    ]);
+    grunt.registerTask('build:dev', [
+        'jshint',
+        'clean:dev',
+        'sass:dev'
     ]);
 
     grunt.registerTask('default', [
-        'newer:jshint',
-        'test',
-        'build'
+        'build:dev'
+    ]);
+
+    grunt.registerTask('nodemon', [
+        'nodemon:dev'
     ]);
 };
