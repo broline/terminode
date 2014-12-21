@@ -1,11 +1,12 @@
 var require = (function (root) {
 
   var cfg = {
-    baseUrl: "./",
+    baseUrl: "../",
     paths: {
       "app": "./",
-      "jquery": "../bower_components/jquery/dist/jquery",
-      "knockout": "../bower_components/knockout.js/knockout",
+      "bower": "./bower_components/",
+      "jquery": "bower/jquery/dist/jquery",
+      "knockout": "bower/knockout.js/knockout",
       "bootstrap": "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min"
     },
     map: {

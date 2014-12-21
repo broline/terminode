@@ -4,16 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var merge = require('merge');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'html')    //# use .html extension for templates
-app.set('layout', './layouts/base');   //# use layout.html as the default layout
+app.set('view engine', 'html') //# use .html extension for templates
+app.set('layout', './layouts/base'); //# use layout.html as the default layout
 //app.set 'partials', foo: 'foo'   //# define partials available to all pages
 app.enable('view cache');
 app.engine('html', require('hogan-express'));
@@ -22,13 +23,29 @@ app.engine('html', require('hogan-express'));
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+//return this payload with each request
+app.use(function(req, res, next) {
+    res.locals = {
+        app: {
+            env: process.env.NODE_ENV == "production" ? "prod" : "dev"
+        }
+    };
+    next();
+});
+
+//register routes
 app.use('/', routes);
-app.use('/users', users);
+
+//register static content, scripts, images, fonts, etc...
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
+app.use('/webapp', express.static(__dirname + '/webapp'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -41,7 +58,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (process.env.NODE_ENV !== 'production') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
