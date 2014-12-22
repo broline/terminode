@@ -1,24 +1,28 @@
 //ignore with jshint since we are redefining require
 var require = (function(root) { // jshint ignore:line
 
+    var env = window.__env;
+
+    var bower = "../bower_components/";
+
     var cfg = {
         baseUrl: "../",
         paths: {
             app: "..",
             webapp: "webapp",
-            bower: "app/bower_components/",
-            "jquery": "bower/jquery/dist/jquery",
-            "knockout": "bower/knockout.js/knockout",
-            "bootstrap": "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min"
+            bower: bower,
+            "jquery": bower + "jquery/dist/jquery",
+            "knockout": bower + "bower/knockout.js/knockout",
+            "bootstrap": bower + "bootstrap-sass-official/assets/javascripts/bootstrap"
         },
         map: {
             "*": {
-                'css': '../bower_components/require-css/css'
+                'css': 'bower/require-css/css'
             }
         },
         shim: {
             "bootstrap": {
-                deps: ["jquery", "css!https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"]
+                deps: ["jquery"]
             }
         }
     };

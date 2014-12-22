@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "bower install",
     "dev": "set NODE_ENV=development && nodemon ./bin/www",
-    "debug": "set NODE_ENVd=development && node --debug ./bin/www",
+    "debug": "set NODE_ENV=development && node --debug ./bin/www",
     "prod": "set NODE_ENV=production && node ./bin/www"
   },
   "dependencies": {

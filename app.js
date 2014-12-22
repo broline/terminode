@@ -14,7 +14,10 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html'); //# use .html extension for templates
 app.set('layout', './layouts/base'); //# use layout.html as the default layout
-//app.set 'partials', foo: 'foo'   //# define partials available to all pages
+var stylesTemplate;
+
+stylesTemplate = "./layouts/styles-" + process.env.NODE_ENV.trim();
+app.set('partials',{styles: stylesTemplate});  //# define partials available to all pages
 app.enable('view cache');
 app.engine('html', require('hogan-express'));
 

@@ -9,8 +9,7 @@
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
-
-        <link rel="stylesheet" href="webapp/{{app.env}}/css/main.css">
+        {{>styles}}
         <script src="bower_components/modernizr/modernizr.js"></script>
     </head>
     <body>
@@ -23,12 +22,13 @@
         <script src="/webapp/config.js"></script>
         <script src="bower_components/requirejs/require.js"></script>
         <script type="text/javascript">
+          window.__env = '{{app.env}}'
           define('app/config',[],function(){
             return {
               script: 'webapp/views/{{page.view}}/main'
             }
           });
-          require(['webapp/main']);
+          require(['webapp/main','bootstrap']);
         </script>
     </body>
 </html>
