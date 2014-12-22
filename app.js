@@ -31,9 +31,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //return this payload with each request
 app.use(function(req, res, next) {
+    var view,
+        segment = req.url.split('/')[0];
+
+    if (!segment) {
+        view = "home";
+    } else {
+        view = segment;
+    }
     res.locals = {
         app: {
             env: process.env.NODE_ENV === "production" ? "prod" : "dev"
+        },
+        page:{
+          view: view
         }
     };
     next();

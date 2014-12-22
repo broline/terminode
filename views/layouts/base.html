@@ -22,5 +22,13 @@
 
         <script src="/webapp/config.js"></script>
         <script src="bower_components/requirejs/require.js"></script>
+        <script type="text/javascript">
+          define('app/config',[],function(){
+            return {
+              script: 'webapp/views/{{page.view}}/main'
+            }
+          });
+          require(['webapp/main']);
+        </script>
     </body>
 </html>
