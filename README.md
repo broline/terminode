@@ -10,8 +10,10 @@ A web browser command line/terminal GUI built with Node.js
 
 2 ```npm install -g nodemon```
 
-3 ```npm run-script dev``` for running in development
+3 ```grunt run-dev``` for running in development
 
-4 ```npm run-script prod``` fro running in production
+4 ```grunt run``` for running in production
+
+5 ```grunt run-debug``` for running in debug with node inspector
 
 

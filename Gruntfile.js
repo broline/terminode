@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 
         watch: {
             js: {
-                files: [ '<%= jshint.all %>' ],
+                files: ['<%= jshint.all %>'],
                 tasks: ['jshint'],
                 options: {
                     livereload: true
@@ -157,8 +157,20 @@ module.exports = function(grunt) {
             dev: {
                 script: './bin/www',
                 options: {
-                  args: ['NODE_ENV=development']
+                    args: ['NODE_ENV=development']
                 }
+            }
+        },
+
+        shell: {
+            run: {
+                command: 'set NODE_ENV=production && node ./bin/www'
+            },
+            rundev: {
+                command: 'set NODE_ENV=development && nodemon ./bin/www'
+            },
+            rundebug: {
+                command: 'set NODE_ENV=development && node --debug ./bin/www'
             }
         }
     });
@@ -216,4 +228,7 @@ module.exports = function(grunt) {
     grunt.registerTask('nodemon', [
         'nodemon:dev'
     ]);
+    grunt.registerTask('run', ['shell:run']);
+    grunt.registerTask('run-dev', ['shell:rundev']);
+    grunt.registerTask('run-debug', ['shell:rundebug']);
 };
