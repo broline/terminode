@@ -1,34 +1,67 @@
 <!doctype html>
 <html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{{ title }}</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ title }}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <!-- Place favicon.ico in the root directory -->
-        {{>styles}}
-        <script src="bower_components/modernizr/modernizr.js"></script>
-    </head>
-    <body>
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+    {{>styles}}
+    <script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+            <![endif]-->
 
-        {{{ yield }}}
+            <!-- Navigation -->
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">{{app.name}}</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+<!--                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="#">About</a>
+                            </li>
+                            <li>
+                                <a href="#">Services</a>
+                            </li>
+                            <li>
+                                <a href="#">Contact</a>
+                            </li>
+                        </ul>
+                    </div> -->
+                    <!-- /.navbar-collapse -->
+                </div>
+                <!-- /.container -->
+            </nav>
+            <div class="container">
+                {{{ yield }}}
+            </div>
 
-        <script src="/webapp/config.js"></script>
-        <script src="bower_components/requirejs/require.js"></script>
-        <script type="text/javascript">
-          window.__env = '{{app.env}}'
-          define('app/config',[],function(){
-            return {
-              script: 'webapp/views/{{page.view}}/main'
-            }
+            <script src="/webapp/config.js"></script>
+            <script src="bower_components/requirejs/require.js"></script>
+            <script type="text/javascript">
+              window.__env = '{{app.env}}'
+              define('app/config',[],function(){
+                return {
+                  script: 'webapp/views/{{page.view}}/main'
+              }
           });
-          require(['webapp/main','bootstrap']);
-        </script>
-    </body>
-</html>
+              require(['webapp/main','bootstrap']);
+          </script>
+      </body>
+      </html>

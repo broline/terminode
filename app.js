@@ -44,7 +44,8 @@ app.use(function(req, res, next) {
     }
     res.locals = {
         app: {
-            env: process.env.NODE_ENV === "production" ? "prod" : "dev"
+            env: process.env.NODE_ENV === "production" ? "prod" : "dev",
+            name: 'terminode'
         },
         page:{
           view: view
