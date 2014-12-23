@@ -12,12 +12,17 @@ var require = (function(root) { // jshint ignore:line
             webapp: "webapp",
             bower: bower,
             "jquery": bower + "jquery/dist/jquery",
-            "knockout": bower + "bower/knockout.js/knockout",
-            "bootstrap": bower + "bootstrap-sass-official/assets/javascripts/bootstrap"
+            "knockout": bower + "knockout/dist/knockout",
+            "bootstrap": bower + "bootstrap-sass-official/assets/javascripts/bootstrap",
+            "crossroads": bower + "crossroads/dist/crossroads.min",
+            "signals": bower + "signals/dist/signals.min",
+            "template": bower + "knockout-require-templates/template",
+            "stringTemplateEngine": bower + "knockout-require-templates/stringTemplateEngine",
+            "text": bower + "requirejs-text/text"
         },
         map: {
             "*": {
-                'css': 'bower/require-css/css'
+                'css': bower + 'require-css/css'
             }
         },
         shim: {
