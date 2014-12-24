@@ -1,0 +1,13 @@
+﻿.terminal{
+    &__{
+        &container{
+            textarea{
+                width: 100%;
+            }
+        }
+        &text{
+            color:white;
+            background-color: #2A2A2A;
+        }
+    }
+}

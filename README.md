@@ -8,12 +8,14 @@ A web browser command line/terminal GUI built with Node.js
 
 1 ```npm install```
 
-2 ```npm install -g nodemon```
+2 install [ruby](http://rubyinstaller.org) and make sure it installs to your PATH for windows
 
-3 ```grunt run-dev``` for running in development
+3 install sass with ```gem install sass```
 
-4 ```grunt run``` for running in production
+4 ```grunt run-dev``` for running in development
 
-5 ```grunt run-debug``` for running in debug with node inspector
+5 ```grunt run``` for running in production
+
+6 ```grunt run-debug``` for running in debug with node inspector
 
 

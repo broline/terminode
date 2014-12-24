@@ -228,7 +228,7 @@ module.exports = function(grunt) {
     grunt.registerTask('nodemon', [
         'nodemon:dev'
     ]);
-    grunt.registerTask('run', ['shell:run']);
-    grunt.registerTask('run-dev', ['shell:rundev']);
-    grunt.registerTask('run-debug', ['shell:rundebug']);
+    grunt.registerTask('run', ['build','shell:run']);
+    grunt.registerTask('run-dev', ['build:dev','shell:rundev']);
+    grunt.registerTask('run-debug', ['build:dev','shell:rundebug']);
 };
