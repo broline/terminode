@@ -1,12 +1,14 @@
-﻿.terminal{
-    &__{
-        &container{
-            textarea{
+﻿.terminal {
+    &__ {
+        &container {
+            textarea {
                 width: 100%;
+                font-family: 'Lucida Console', 'Lucida Sans Typewriter', monaco, 'Bitstream Vera Sans Mono', monospace;
             }
         }
-        &text{
-            color:white;
+
+        &text {
+            color: white;
             background-color: #2A2A2A;
         }
     }
