@@ -1,5 +1,6 @@
-define(['knockout','crossroads', 'jquery',
-        'text!./index.html!home-index'
+define(['knockout', 'crossroads', 'jquery',
+        'text!./index.html!home-index',
+		'webapp/components/terminal/terminal'
     ],
     function(ko, crossroads, $, index) {
 

@@ -8,6 +8,9 @@
     "crossroads": "~0.12.0",
     "signals": "~1.0.0",
     "knockout-require-templates": "~1.0.1",
-    "requirejs-text": "~2.0.12"
+    "requirejs-text": "~2.0.12",
+    "knockout.punches": "~0.5.0",
+    "lodash": "~2.4.1",
+    "require-css": "~0.1.8"
   }
 }

@@ -18,12 +18,10 @@ var require = (function(root) { // jshint ignore:line
             "signals": bower + "signals/dist/signals.min",
             "template": bower + "knockout-require-templates/template",
             "stringTemplateEngine": bower + "knockout-require-templates/stringTemplateEngine",
-            "text": bower + "requirejs-text/text"
-        },
-        map: {
-            "*": {
-                'css': bower + 'require-css/css'
-            }
+            "text": bower + "requirejs-text/text",
+            "knockout.punches": bower + "knockout.punches/knockout.punches",
+            "lodash": bower + "lodash/dist/lodash",
+            'css': bower + 'require-css/css'
         },
         shim: {
             "bootstrap": {

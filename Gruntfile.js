@@ -52,7 +52,7 @@ module.exports = function(grunt) {
                 }
             },
             sass: {
-                files: ['<%= config.webApp %>/styles/**/*.scss'],
+            	files: ['<%= config.webApp %>/styles/**/*.scss', '<%= config.webApp %>/components/**/*.scss'],
                 tasks: ['sass:dev']
             }
         },
@@ -140,6 +140,12 @@ module.exports = function(grunt) {
             dist: {
                 files: [{
                     '<%= config.webApp %>/dist/css/main.css': '<%= config.webApp %>/styles/dist.scss',
+                },
+                {
+                	expand: true,
+                	src: ["<%= config.webApp %>/components/**/*.scss"],
+                	dest: "./styles",
+                	ext: ".css"
                 }]
             },
             dev: {
@@ -149,6 +155,12 @@ module.exports = function(grunt) {
                 files: [{
                     '<%= config.webApp %>/dev/css/main.css': '<%= config.webApp %>/styles/main.scss',
                     '<%= config.webApp %>/dev/css/bootstrap.css': '<%= config.webApp %>/styles/bootstrap-custom.scss'
+                },
+                {
+                	expand: true,
+                	src: ["<%= config.webApp %>/components/**/*.scss"],
+                	dest: "./styles",
+                	ext: ".css"
                 }]
             }
         },
