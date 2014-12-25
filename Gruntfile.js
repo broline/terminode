@@ -144,7 +144,7 @@ module.exports = function(grunt) {
                 {
                 	expand: true,
                 	src: ["<%= config.webApp %>/components/**/*.scss"],
-                	dest: "./styles",
+                	dest: "./",
                 	ext: ".css"
                 }]
             },
@@ -159,7 +159,7 @@ module.exports = function(grunt) {
                 {
                 	expand: true,
                 	src: ["<%= config.webApp %>/components/**/*.scss"],
-                	dest: "./styles",
+                	dest: "./",
                 	ext: ".css"
                 }]
             }
