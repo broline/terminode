@@ -21,7 +21,8 @@ var require = (function(root) { // jshint ignore:line
             "text": bower + "requirejs-text/text",
             "knockout.punches": bower + "knockout.punches/knockout.punches",
             "lodash": bower + "lodash/dist/lodash",
-            'css': bower + 'require-css/css'
+            'css': bower + 'require-css/css',
+            'socket.io': bower + 'socket.io-client/socket.io'
         },
         shim: {
             "bootstrap": {

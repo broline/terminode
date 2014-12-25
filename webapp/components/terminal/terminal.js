@@ -1,9 +1,9 @@
-define(['knockout', 'jquery', 'lodash', './model',
+define(['knockout', 'jquery', 'lodash', './model','socket.io',
         'knockout.punches',
-		'css!terminal',
+		'css!./terminal',
         'template!./template/index.html!terminal-main',
     ],
-    function(ko, $, _, ViewModel) {
+    function(ko, $, _, ViewModel, io) {
         
         ko.punches.enableAll();
 
@@ -14,11 +14,17 @@ define(['knockout', 'jquery', 'lodash', './model',
                 element.model = new ViewModel();
                 element.model.instanceName = allBindingsAccessor.get('id') || _.uniqueId("terminal--");
                 ko.renderTemplate("terminal-main", element.model, null, element, "replaceChildren");
+
+                var socket = io.connect('http://localhost:3001');
+                socket.on('server', function (data) {
+                	console.log(data);
+                	//socket.emit('my other event', { my: 'data' });
+                });
+
                 return { controlsDescendantBindings: true };
             },
             update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 
-                element.value = ko.utils.unwrapObservable(valueAccessor());
             }
         };
 
