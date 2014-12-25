@@ -12,13 +12,19 @@ router.get('/terminal', function (req, res) {
 		//console.log('AVAILABLE PORT AT: ' + port)
 
 		var io = require('socket.io')(port);
+
+		
 		io.on('connection', function (socket) {
-			socket.emit('server', { hello: 'world' });
-			//socket.on('my other event', function (data) {
-			//	console.log(data);
-			//});
+			var prc = require('child_process');
+			var cmd = prc.spawn('cmd',['ls']);
+			cmd.stdout.on("data", function (data) {
+				socket.emit('server', { stdout: String.fromCharCode.apply(null, new Uint16Array(data)) });
+			})
 		});
-		res.send({port: port});
+
+		res.send({ port: port });
+
+
 	});
 });
 

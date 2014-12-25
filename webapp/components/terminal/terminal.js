@@ -10,10 +10,12 @@ define(['knockout', 'jquery', 'lodash', './model','socket.io',
         ko.bindingHandlers.terminal = {
             init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 
-                var value = ko.utils.unwrapObservable(valueAccessor());
+            	var value = ko.utils.unwrapObservable(valueAccessor());
+	
                 element.model = new ViewModel();
                 element.model.instanceName = allBindingsAccessor.get('id') || _.uniqueId("terminal--");
                 ko.renderTemplate("terminal-main", element.model, null, element, "replaceChildren");
+                var textArea = $(element).find("textarea.terminal__text").first();
 
                 $.ajax({
                 	url: "terminal/",
@@ -21,7 +23,7 @@ define(['knockout', 'jquery', 'lodash', './model','socket.io',
                 }).done(function (data) {
                 	var socket = io.connect('http://localhost:' + data.port);
                 	socket.on('server', function (data) {
-                		console.log(data);
+                		textArea.val(textArea.val() + "\n" + data.stdout);
                 		//socket.emit('my other event', { my: 'data' });
                 	});
                 });
@@ -34,6 +36,4 @@ define(['knockout', 'jquery', 'lodash', './model','socket.io',
 
             }
         };
-
-        ko.virtualElements.allowedBindings.terminal = true;
     });
