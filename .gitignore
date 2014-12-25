@@ -6,4 +6,5 @@ bower_components
 webapp/dev/
 webapp/dist/
 webapp/styles/css/components
+webapp/components/**/*.css
 *.css.map
