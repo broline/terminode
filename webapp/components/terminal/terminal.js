@@ -15,11 +15,18 @@ define(['knockout', 'jquery', 'lodash', './model','socket.io',
                 element.model.instanceName = allBindingsAccessor.get('id') || _.uniqueId("terminal--");
                 ko.renderTemplate("terminal-main", element.model, null, element, "replaceChildren");
 
-                var socket = io.connect('http://localhost:3001');
-                socket.on('server', function (data) {
-                	console.log(data);
-                	//socket.emit('my other event', { my: 'data' });
+                $.ajax({
+                	url: "terminal/",
+					type: "GET"
+                }).done(function (data) {
+                	var socket = io.connect('http://localhost:' + data.port);
+                	socket.on('server', function (data) {
+                		console.log(data);
+                		//socket.emit('my other event', { my: 'data' });
+                	});
                 });
+
+               
 
                 return { controlsDescendantBindings: true };
             },

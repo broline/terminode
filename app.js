@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
+var router = require('./routes/index');
 
 var app = express();
 
@@ -55,7 +55,8 @@ app.use(function(req, res, next) {
 });
 
 //register routes
-app.use('/', routes);
+app.use(router);
+//app.use('terminal/', terminalRoute);
 
 //register static content, scripts, images, fonts, etc...
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
