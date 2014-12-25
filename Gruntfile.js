@@ -182,7 +182,7 @@ module.exports = function(grunt) {
                 command: 'set NODE_ENV=development && nodemon ./bin/www'
             },
             rundebug: {
-                command: 'set NODE_ENV=development && node --debug ./bin/www'
+                command: 'set NODE_ENV=development && nodemon --debug-brk ./bin/www'
             }
         }
     });
