@@ -7,7 +7,7 @@ router.get('/', function (req, res) {
 	res.render('home/index', { title: 'terminode' });
 });
 
-router.get('/terminal', function (req, res) {
+router.get('/api/terminal', function (req, res) {
 	portscanner.findAPortNotInUse(3000, 5000, '127.0.0.1', function (error, port) {
 		//console.log('AVAILABLE PORT AT: ' + port)
 

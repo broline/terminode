@@ -18,7 +18,7 @@ define(['knockout', 'jquery', 'lodash', './model','socket.io',
                 var textArea = $(element).find("textarea.terminal__text").first();
 
                 $.ajax({
-                	url: "terminal/",
+                	url: "api/terminal/",
 					type: "GET"
                 }).done(function (data) {
                 	var socket = io.connect('http://localhost:' + data.port);
