@@ -13,19 +13,29 @@ router.get('/api/terminal', function (req, res) {
 
 		var io = require('socket.io')(port);
 
-		
 		io.on('connection', function (socket) {
 			var prc = require('child_process');
-			var cmd = prc.spawn('cmd',['ls']);
+			cmd = prc.spawn('cmd');
 			cmd.stdout.on("data", function (data) {
-				socket.emit('server', { stdout: String.fromCharCode.apply(null, new Uint16Array(data)) });
+				var dat = String.fromCharCode.apply(null, new Uint16Array(data));
+				socket.emit('server', { stdout: dat });
 			})
+			cmd.stderr.on("data", function (data) {
+				var dat = String.fromCharCode.apply(null, new Uint16Array(data));
+				socket.emit('server', { stdout: dat });
+			})
+			socket.on('command', function (command) {
+				cmd.stdin.write(command + "\n");
+			});
 		});
 
 		res.send({ port: port });
 
-
 	});
+});
+
+router.post('/api/terminal/{pid}/{command}', function (req, res, pid, cmd) {
+	
 });
 
 module.exports = router;
