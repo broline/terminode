@@ -12,6 +12,7 @@
     "knockout.punches": "~0.5.0",
     "lodash": "~2.4.1",
     "require-css": "~0.1.8",
-    "socket.io-client": "~1.2.1"
+    "socket.io-client": "~1.2.1",
+    "knockout-x-editable": "~0.1.1"
   }
 }

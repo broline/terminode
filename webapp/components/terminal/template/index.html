@@ -1,5 +1,16 @@
-<div class="row terminal__container">
-	<div class="col-md-12">
-		<textarea class="terminal__text" rows="20"></textarea>
+<div class="terminal__container">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4>{{name}}</h4>
+			<div>{{port}}</div>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12">
+					<div><pre data-bind="text: output" class="terminal__text terminal__text--output form-control"></pre></div>
+					<input data-bind="value: command, valueUpdate: 'afterkeydown'" type="text" class="terminal__text terminal__text--input" />
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

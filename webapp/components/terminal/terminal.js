@@ -1,50 +1,45 @@
-define(['knockout', 'jquery', 'lodash', './model','socket.io',
+define(['knockout', 'jquery', 'lodash', './model', 'socket.io',
         'knockout.punches',
 		'css!./terminal',
         'template!./template/index.html!terminal-main',
-    ],
-    function(ko, $, _, ViewModel, io) {
-        
-        ko.punches.enableAll();
+],
+    function (ko, $, _, ViewModel, io) {
 
-        ko.bindingHandlers.terminal = {
-            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    	ko.punches.enableAll();
 
-            	var value = ko.utils.unwrapObservable(valueAccessor());
-	
-                element.model = new ViewModel();
-                element.model.instanceName = allBindingsAccessor.get('id') || _.uniqueId("terminal--");
-                ko.renderTemplate("terminal-main", element.model, null, element, "replaceChildren");
-                var $textArea = $(element).find("textarea.terminal__text").first();
+    	ko.bindingHandlers.terminal = {
+    		init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 
-                $.ajax({
-                	url: "api/terminal/",
-					type: "GET"
-                }).done(function (data) {
-                	var socket = io.connect('http://localhost:' + data.port);
-                	socket.on('server', function (data) {
-                		$textArea.val($textArea.val() + data.stdout);
-                		if ($textArea.length) {
-							//scroll to the bottom
-                			$textArea.scrollTop($textArea[0].scrollHeight - $textArea.height());
-                		}
-                	});
+    			var value = ko.utils.unwrapObservable(valueAccessor());
 
-                	$textArea.keydown(function (event) {
-                		if (event.which === 13) {
-                			var arr = $textArea.val().split(">");
-                			var val = arr[arr.length - 1];
-                			socket.emit("command", val);
-                		}
-                	});
-                });
+    			viewModel = new ViewModel();
 
-               
+    			viewModel.instanceName = allBindingsAccessor.get('id') || _.uniqueId("terminal--");
+    			ko.renderTemplate("terminal-main", viewModel, null, element, "replaceChildren");
+    			var $input = $(element).find(".terminal__text--input").first();
+    			var $output = $(element).find(".terminal__text--output").first();
 
-                return { controlsDescendantBindings: true };
-            },
-            update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    			$output.click(function () { $input.focus();});
 
-            }
-        };
+    			$input.keydown(function (event) {
+    				if (event.which === 13) {
+    					if (viewModel.command() === "cls") {
+    						viewModel.clear();
+    					}
+    					viewModel.submit();
+    				}
+    			});
+
+    			viewModel.output.subscribe(function () {
+    				$output.scrollTop($output[0].scrollHeight - $output.height());
+    			});
+
+    			return { controlsDescendantBindings: true };
+    		},
+    		update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+
+    		}
+    	};
+
+    	
     });
