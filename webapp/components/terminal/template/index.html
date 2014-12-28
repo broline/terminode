@@ -1,7 +1,10 @@
 <div class="terminal__container">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h4 ><span data-bind="editable: nickname" title="{{port}}"></span></h4>
+			<h4>
+				{{#if isLoading()}}<span>Loading...</span>{{/if}}
+				{{#if !isLoading()}}<span data-bind="editable: nickname" title="{{port}}"></span>{{/if}}
+			</h4>
 		</div>
 		<div class="panel-body">
 			<div class="row">

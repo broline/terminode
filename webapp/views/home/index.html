@@ -1,1 +1,13 @@
-<div data-bind="terminal: true"></div>
+<ul class="nav nav-tabs">
+	{{#foreach terminals}}
+	<li role="presentation" class="{{($parent.selectedTerminal() && $parent.selectedTerminal().id === id) ? 'active' : ''}}">
+		{{#if isLoading()}}<a>Loading...</a>{{/if}}
+		{{#if !isLoading()}}<a data-bind="click: $parent.select($data)" href="#">{{nickname}} <span data-bind="click: function(){$parent.remove($data);}"><i class="fa fa-times fa-2"></i></span></a>{{/if}}
+	</li>
+	{{/foreach}}
+	<li role="presentation"><a data-bind="click: addTerminal" href="#">New <i class="fa fa-plus fa-2"></i></a></li>
+</ul>
+
+{{#if selectedTerminal}}
+<div data-bind="terminal: selectedTerminal"></div>
+{{/if}}

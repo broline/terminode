@@ -1,4 +1,4 @@
-define(['knockout', 'jquery', 'lodash', './model', 'socket.io',
+define(['knockout', 'jquery', './model', 'socket.io',
         'knockout.punches',
 		'css!./terminal',
         'template!./template/index.html!terminal-main',
@@ -11,16 +11,18 @@ define(['knockout', 'jquery', 'lodash', './model', 'socket.io',
     	ko.bindingHandlers.terminal = {
     		init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 
+    			return { controlsDescendantBindings: true };
+    		},
+    		update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     			var value = ko.utils.unwrapObservable(valueAccessor());
 
-    			viewModel = new ViewModel();
+    			viewModel = (value && value !== true) ? value : new ViewModel();
 
-    			viewModel.instanceName = allBindingsAccessor.get('id') || _.uniqueId("terminal--");
     			ko.renderTemplate("terminal-main", viewModel, null, element, "replaceChildren");
     			var $input = $(element).find(".terminal__text--input").first();
     			var $output = $(element).find(".terminal__text--output").first();
 
-    			$output.click(function () { $input.focus();});
+    			$output.click(function () { $input.focus(); });
 
     			$input.keydown(function (event) {
     				if (event.which === 13) {
@@ -35,10 +37,9 @@ define(['knockout', 'jquery', 'lodash', './model', 'socket.io',
     				$output.scrollTop($output[0].scrollHeight - $output.height());
     			});
 
-    			return { controlsDescendantBindings: true };
-    		},
-    		update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-
+    			viewModel.selected.subscribe(function () {
+    				$output.scrollTop($output[0].scrollHeight - $output.height());
+    			});
     		}
     	};
 

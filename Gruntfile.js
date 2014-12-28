@@ -134,7 +134,7 @@ module.exports = function(grunt) {
         sass: {
             options: {
                 style: 'compressed',
-                loadPath: 'bower_components/bootstrap-sass-official/assets/stylesheets/',
+                loadPath: ['bower_components/bootstrap-sass-official/assets/stylesheets/', 'bower_components/fontawesome/scss/'],
                 trace: true
             },
             dist: {
@@ -154,7 +154,8 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     '<%= config.webApp %>/dev/css/main.css': '<%= config.webApp %>/styles/main.scss',
-                    '<%= config.webApp %>/dev/css/bootstrap.css': '<%= config.webApp %>/styles/bootstrap-custom.scss'
+                    '<%= config.webApp %>/dev/css/bootstrap.css': '<%= config.webApp %>/styles/bootstrap-custom.scss',
+                    '<%= config.webApp %>/dev/css/fontawesome.css': '<%= config.webApp %>/styles/fontawesome-custom.scss'
                 },
                 {
                 	expand: true,

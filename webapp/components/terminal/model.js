@@ -1,17 +1,38 @@
-define(["knockout", "socket.io"],
-  function (ko, io) {
+define(["knockout", "socket.io", 'lodash'],
+  function (ko, io, _) {
   	function ViewModel() {
 
-  		this.nickname = ko.observable("Terminal Name");
+  		this.id = _.uniqueId("terminal--");
+  		this.nickname = ko.observable("");
   		this.command = ko.observable();
   		this.output = ko.observable("");
   		this.port = ko.observable();
   		this.socket = ko.observable();
   		this.reconnectAttempts = ko.observable(0);
+  		this.isLoaded = ko.observable(true);
+  		this.isLoading = ko.observable(false);
+  		this.selected = ko.observable(false).extend({notify: 'always'});
 
-  		this.port.subscribe(function (newPort) {
-  			this.socket(io.connect('http://localhost:' + newPort));
+  		this.load();
+
+  	}
+
+  	ViewModel.prototype.load = function () {
+  		this.isLoading(true);
+  		$.ajax({
+  			url: "api/terminal/",
+  			type: "GET",
+			context: this
+  		}).done(function (data) {
+  			this.port(data.port);
+  			this.socket(io.connect('http://localhost:' + this.port()));
   			this.socket().on('server', function (data) {
+  				if (!this.nickname() && data.stdout && data.stdout.indexOf(">", this.length - 1) !== -1) {
+  					var arr = data.stdout.split("\n");
+  					this.nickname(arr[arr.length - 1]);
+  					this.isLoading(false);
+  					this.isLoaded(true);
+  				}
   				this.output(this.output() + data.stdout);
   			}.bind(this));
   			this.socket().on('connect_error reconnect_error', function (data) {
@@ -21,19 +42,6 @@ define(["knockout", "socket.io"],
   					this.reconnectAttempts(0);
   				}
   			}.bind(this));
-  		}, this);
-
-  		this.load();
-
-  	}
-
-  	ViewModel.prototype.load = function () {
-  		$.ajax({
-  			url: "api/terminal/",
-  			type: "GET",
-			context: this
-  		}).done(function (data) {
-  			this.port(data.port);
   		}.bind(this));
   	};
 
