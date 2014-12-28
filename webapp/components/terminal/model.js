@@ -4,7 +4,7 @@ define(["knockout", "socket.io"],
 
   		this.nickname = ko.observable("Terminal Name");
   		this.command = ko.observable();
-  		this.output = ko.observable();
+  		this.output = ko.observable("");
   		this.port = ko.observable();
   		this.socket = ko.observable();
   		this.reconnectAttempts = ko.observable(0);
