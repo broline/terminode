@@ -3,6 +3,8 @@
 
 A web browser command line/terminal GUI built with Node.js
 
+currently only developed to support windows command line. Will make compat with other Operating systems in a future release
+
 
 ###Development
 
