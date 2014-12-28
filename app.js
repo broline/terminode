@@ -61,6 +61,7 @@ app.use(router);
 //register static content, scripts, images, fonts, etc...
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use('/webapp', express.static(__dirname + '/webapp'));
+app.use('/webapp/*fonts/bootstrap', express.static(__dirname + '/bower_components/bootstrap-sass-official/assets/fonts/bootstrap'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
