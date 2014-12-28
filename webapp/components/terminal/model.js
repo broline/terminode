@@ -2,7 +2,7 @@ define(["knockout", "socket.io"],
   function (ko, io) {
   	function ViewModel() {
 
-  		this.name = ko.observable("Terminal Name");
+  		this.nickname = ko.observable("Terminal Name");
   		this.command = ko.observable();
   		this.output = ko.observable();
   		this.port = ko.observable();

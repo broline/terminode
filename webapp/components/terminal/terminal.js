@@ -2,6 +2,7 @@ define(['knockout', 'jquery', 'lodash', './model', 'socket.io',
         'knockout.punches',
 		'css!./terminal',
         'template!./template/index.html!terminal-main',
+		'ko.xedit'
 ],
     function (ko, $, _, ViewModel, io) {
 

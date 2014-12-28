@@ -22,11 +22,16 @@ var require = (function(root) { // jshint ignore:line
             "knockout.punches": bower + "knockout.punches/knockout.punches",
             "lodash": bower + "lodash/dist/lodash",
             'css': bower + 'require-css/css',
-            'socket.io': bower + 'socket.io-client/socket.io'
+            'socket.io': bower + 'socket.io-client/socket.io',
+            'ko.xedit': bower + "knockout-x-editable/knockout.x-editable",
+            'xedit': bower + "x-editable/dist/bootstrap3-editable/js/bootstrap-editable"
         },
         shim: {
             "bootstrap": {
                 deps: ["jquery"]
+            },
+            'ko.xedit': {
+				deps: ['xedit']
             }
         }
     };
