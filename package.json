@@ -1,7 +1,6 @@
 {
   "name": "terminode",
   "version": "0.0.0",
-  "private": true,
     "scripts": {
         "postinstall": "bower install",
         "dev": "set NODE_ENV=development && nodemon ./bin/www",
