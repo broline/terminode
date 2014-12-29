@@ -8,13 +8,17 @@
 // If you want to recursively match all subfolders, use:
 // 'test/spec/**/*.js'
 
+var noCache = require("connect-nocache")();
+
 module.exports = function(grunt) {
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
     // Load grunt tasks automatically
-    require('load-grunt-tasks')(grunt);
+    require('load-grunt-tasks')(grunt, {
+    	pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']
+    });
 
     // Configurable paths
     var config = {
@@ -56,46 +60,21 @@ module.exports = function(grunt) {
                 tasks: ['sass:dev']
             }
         },
-        // The actual grunt server settings
         connect: {
-            options: {
-                port: 9000,
-                open: true,
-                livereload: 35729,
-                // Change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
-            },
-            livereload: {
-                options: {
-                    middleware: function(connect) {
-                        return [
-                            connect.static('.tmp'),
-                            connect().use('/bower_components', connect.static('./bower_components')),
-                            connect.static(config.webApp)
-                        ];
-                    }
-                }
-            },
-            test: {
-                options: {
-                    open: false,
-                    port: 9001,
-                    middleware: function(connect) {
-                        return [
-                            connect.static('.tmp'),
-                            connect.static('test'),
-                            connect().use('/bower_components', connect.static('./bower_components')),
-                            connect.static(config.webApp)
-                        ];
-                    }
-                }
-            },
-            dist: {
-                options: {
-                    base: '<%= config.dist %>',
-                    livereload: false
-                }
-            }
+        	options: {
+        		port: 8000,
+        		base: "./",
+        		middleware: function (connect, options) {
+        			return [noCache, connect.static(options.base[0])];
+        		}
+        	},
+        	temp: {},
+        	persist: {
+        		options: {
+        			keepalive: true,
+        			open: "http://localhost:8000/_SpecRunner.html"
+        		}
+        	}
         },
 
         // Empties folders to start fresh
@@ -185,10 +164,22 @@ module.exports = function(grunt) {
             rundebug: {
                 command: 'set NODE_ENV=development && nodemon --debug-brk ./bin/www'
             }
+        },
+        jasmine: {
+        	test: {
+        		options: {
+        			host: "http://localhost:8000/",
+        			specs: ["*spec.js"],
+        			keepRunner: true,
+        			template: require("grunt-template-jasmine-requirejs"),
+        			templateOptions: {
+        				requireConfig: require("./webapp/config")
+        			}
+        		}
+        	}
         }
-    });
 
-    grunt.loadNpmTasks('grunt-nodemon');
+    });
 
     grunt.registerTask('serve', 'start the server and preview your webApp, --allow-remote for remote access', function(target) {
         if (grunt.option('allow-remote')) {
@@ -243,5 +234,8 @@ module.exports = function(grunt) {
     ]);
     grunt.registerTask('run', ['build','shell:run']);
     grunt.registerTask('run-dev', ['build:dev','shell:rundev']);
-    grunt.registerTask('run-debug', ['build:dev','shell:rundebug']);
+    grunt.registerTask('run-debug', ['build:dev', 'shell:rundebug']);
+
+    grunt.registerTask('test', ['jshint', "jasmine:test:build", "connect:persist"]);
+    grunt.registerTask('test:headless', ["connect:temp", "jasmine"]);
 };
