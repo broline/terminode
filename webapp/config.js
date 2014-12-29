@@ -31,7 +31,8 @@ var require = (function (root) { // jshint ignore:line
 			'css': bower + 'require-css/css',
 			'socket.io': bower + 'socket.io-client/socket.io',
 			'ko.xedit': bower + "knockout-x-editable/knockout.x-editable",
-			'xedit': bower + "x-editable/dist/bootstrap3-editable/js/bootstrap-editable"
+			'xedit': bower + "x-editable/dist/bootstrap3-editable/js/bootstrap-editable",
+			'mock-ajax': bower + 'jasmine-ajax/lib/mock-ajax'
 		},
 		shim: {
 			"bootstrap": {
@@ -39,6 +40,9 @@ var require = (function (root) { // jshint ignore:line
 			},
 			'ko.xedit': {
 				deps: ['xedit']
+			},
+			'xedit': {
+				deps: ['bootstrap']
 			}
 		}
 	};

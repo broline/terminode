@@ -1,5 +1,5 @@
 define(['knockout', 'jquery', './model',
-        "./main"
+        "./terminal"
     ],
     function(ko, $, ViewModel) {
 

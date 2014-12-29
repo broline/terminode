@@ -8,3 +8,5 @@ webapp/dist/
 webapp/styles/css/components
 webapp/components/**/*.css
 *.css.map
+_SpecRunner.html
+.grunt
