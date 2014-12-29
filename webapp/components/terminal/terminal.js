@@ -4,7 +4,7 @@ define(['knockout', 'jquery', './model', 'socket.io',
         'template!./template/index.html!terminal-main',
 		'ko.xedit'
 ],
-    function (ko, $, _, ViewModel, io) {
+    function (ko, $, ViewModel, io) {
 
     	ko.punches.enableAll();
 
