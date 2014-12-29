@@ -5,13 +5,33 @@ define(["knockout", "socket.io", 'lodash'],
   		this.id = _.uniqueId("terminal--");
   		this.nickname = ko.observable("");
   		this.command = ko.observable();
+  		this.commands = ko.observableArray();
+  		this.previousCommandIndex = ko.observable(-1);
   		this.output = ko.observable("");
   		this.port = ko.observable();
   		this.socket = ko.observable();
   		this.reconnectAttempts = ko.observable(0);
   		this.isLoaded = ko.observable(true);
   		this.isLoading = ko.observable(false);
-  		this.selected = ko.observable(false).extend({notify: 'always'});
+  		this.selected = ko.observable(false).extend({ notify: 'always' });
+
+  		this.getPreviousCommand = function () {
+  			if (this.commands().length && (this.commands().length - 1) >= this.previousCommandIndex() + 1) {
+  				this.previousCommandIndex(this.previousCommandIndex() + 1);
+  				this.command(this.commands()[this.previousCommandIndex()]);
+  			}
+  		}.bind(this);
+
+  		this.getNextCommand = function () {
+  			if (this.previousCommandIndex() > -1) {
+  				this.previousCommandIndex(this.previousCommandIndex() - 1);
+  				if (this.previousCommandIndex() === -1) {
+  					this.command("");
+  				} else {
+  					this.command(this.commands()[this.previousCommandIndex()]);
+  				}
+  			}
+  		}.bind(this);
 
   		this.load();
 
@@ -51,6 +71,8 @@ define(["knockout", "socket.io", 'lodash'],
 
   	ViewModel.prototype.submit = function () {
   		this.socket().emit("command", this.command());
+  		this.commands.unshift(this.command());
+  		this.previousCommandIndex(-1);
   		this.command("");
   	};
 

@@ -25,11 +25,17 @@ define(['knockout', 'jquery', './model', 'socket.io',
     			$output.click(function () { $input.focus(); });
 
     			$input.keydown(function (event) {
-    				if (event.which === 13) {
+    				if (event.which === 13) { //enter
     					if (viewModel.command() === "cls") {
     						viewModel.clear();
     					}
     					viewModel.submit();
+    				}
+    				if (event.which === 38) { //up arrow
+    					viewModel.getPreviousCommand();
+    				}
+    				if (event.which === 40) { //up arrow
+    					viewModel.getNextCommand();
     				}
     			});
 
