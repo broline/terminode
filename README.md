@@ -13,16 +13,18 @@ currently only developed for windows but plan to support more platforms in the f
 
 ###Development
 
-1 ```npm install```
+- ```npm install```
 
-2 install [ruby](http://rubyinstaller.org) and make sure it installs to your PATH for windows
+- install [ruby](http://rubyinstaller.org) and make sure it installs to your PATH for windows
 
-3 install sass with ```gem install sass```
+- install sass with ```gem install sass```
 
-4 ```grunt run-dev``` for running in development
+- ```grunt run-dev``` for running in development
 
-5 ```grunt run``` for running in production
+- ```grunt run``` for running in production
 
-6 ```grunt run-debug``` for running in debug with node inspector
+- ```grunt run-debug``` for running in debug with node inspector
+
+- test with ```grunt test```
 
 

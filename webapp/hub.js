@@ -12,8 +12,13 @@
 			});
 		}
 
+		function raiseClientEvent(socket, event, data) {
+			socket.emit(event, data);
+		}
+
 		return {
 			connect: connect,
-			registerEvent: registerEvent
+			registerEvent: registerEvent,
+			raiseClientEvent: raiseClientEvent
 		};
 	});

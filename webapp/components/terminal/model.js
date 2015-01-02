@@ -91,7 +91,7 @@ define(["knockout", 'lodash', 'webapp/hub','webapp/store'],
   	};
 
   	ViewModel.prototype.submit = function () {
-  		this.socket().emit("command", this.command());
+  		hub.raiseClientEvent(this.socket(), "command", this.command());
   		this.commands.unshift(this.command());
   		this.previousCommandIndex(-1);
   		this.command("");

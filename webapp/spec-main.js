@@ -2,7 +2,7 @@
 
 });
 
-define('webapp/store',[], function () {
+define('webapp/store', [], function () {
 	//in memory stub
 	var values = [];
 	var PREFIX = "terminode_";
@@ -20,7 +20,7 @@ define('webapp/store',[], function () {
 	};
 });
 
-define('webapp/hub',[], function () {
+define('webapp/hub', [], function () {
 	//stub hub
 
 	var sockets = [];
@@ -42,14 +42,19 @@ define('webapp/hub',[], function () {
 		sockets[socket.io.uri][event] = callback;
 	}
 
-	function raiseServerEvent(socket, event) {
+	function raiseServerEvent(socket, event, data) {
 		var callback = sockets[socket.io.uri][event];
-		callback();
+		callback(data);
+	}
+
+	function raiseClientEvent(socket, event, data) {
+		console.log(event + " raised by client");
 	}
 
 	return {
 		connect: connect,
 		registerEvent: registerEvent,
-		raiseEvent: raiseServerEvent
+		raiseServerEvent: raiseServerEvent,
+		raiseClientEvent: raiseClientEvent
 	};
 });
