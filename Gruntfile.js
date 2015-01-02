@@ -166,7 +166,7 @@ module.exports = function(grunt) {
         	test: {
         		options: {
         			host: "http://localhost:8000/",
-        			specs: ["webapp/spec-main","webapp/**/*spec.js"],
+        			specs: ["webapp/spec-main.js","webapp/**/*spec.js"],
         			keepRunner: true,
         			template: require("grunt-template-jasmine-requirejs"),
         			templateOptions: {

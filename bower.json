@@ -16,6 +16,7 @@
     "knockout-x-editable": "~0.1.1",
     "x-editable": "~1.5.1",
     "fontawesome": "~4.2.0",
-    "jasmine-ajax": "~2.99.0"
+    "jasmine-ajax": "~2.99.0",
+    "jquery.cookie": "~1.4.1"
   }
 }

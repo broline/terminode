@@ -1,11 +1,10 @@
-define(["knockout", "../model", "socket.io",
+define(["knockout", "../model", "webapp/hub", "webapp/store",
         "mock-ajax"
     ],
-    function(ko, ViewModel, io) {
+    function(ko, ViewModel, hub, store) {
         describe("terminal binding model", function() {
 
         	var model;
-        	var ioServer = io.listen(3001);
 
             beforeEach(function() {
             	jasmine.Ajax.install();

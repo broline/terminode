@@ -32,7 +32,8 @@ var require = (function (root) { // jshint ignore:line
 			'socket.io': bower + 'socket.io-client/socket.io',
 			'ko.xedit': bower + "knockout-x-editable/knockout.x-editable",
 			'xedit': bower + "x-editable/dist/bootstrap3-editable/js/bootstrap-editable",
-			'mock-ajax': bower + 'jasmine-ajax/lib/mock-ajax'
+			'mock-ajax': bower + 'jasmine-ajax/lib/mock-ajax',
+			'jquery.cookie': bower + 'jquery.cookie/jquery.cookie'
 		},
 		shim: {
 			"bootstrap": {
