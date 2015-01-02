@@ -16,7 +16,9 @@ app.set('view engine', 'html'); //# use .html extension for templates
 app.set('layout', './layouts/base'); //# use layout.html as the default layout
 var stylesTemplate;
 
-stylesTemplate = "./layouts/styles-" + process.env.NODE_ENV.trim();
+var environment = process.env.NODE_ENV || "production";
+
+stylesTemplate = "./layouts/styles-" + environment.trim();
 app.set('partials',{styles: stylesTemplate});  //# define partials available to all pages
 app.enable('view cache');
 app.engine('html', require('hogan-express'));
@@ -44,7 +46,7 @@ app.use(function(req, res, next) {
     }
     res.locals = {
         app: {
-            env: process.env.NODE_ENV === "production" ? "prod" : "dev",
+        	env: environment === "production" ? "prod" : "dev",
             name: 'terminode'
         },
         page:{
@@ -74,7 +76,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (process.env.NODE_ENV !== 'production') {
+if (environment !== 'production') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
