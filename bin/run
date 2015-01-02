@@ -3,6 +3,8 @@
 var exec = require('child_process').exec;
 var open = require("open");
 
-require('./www');
+var www = require('./www');
 
-open("http://localhost:3000");
+var app = www.app;
+
+open("http://localhost:" + app.get("port"));
