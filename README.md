@@ -9,7 +9,7 @@ currently only developed for windows but plan to support more platforms in the f
 
 - insatll with npm ```npm install -g terminode```
 - run ```terminode``` to start the app (defaults to port 3000)
-- to set the port run ```set PORT=4501 && terminode
+- to set the port run ```set PORT=4501 && terminode```
 
 ###Development
 
