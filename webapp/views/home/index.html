@@ -11,3 +11,11 @@
 {{#if selectedTerminal}}
 <div data-bind="terminal: selectedTerminal"></div>
 {{/if}}
+
+{{#if savedTerminals}}
+<ul>
+	{{#foreach savedTerminalNames}}
+	<li>{{$data}}</li>
+	{{/foreach}}
+</ul>
+{{/if}}

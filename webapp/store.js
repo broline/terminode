@@ -10,25 +10,26 @@
 
 		Store.prototype.setValue = function (name, val) {
 			$.cookie(getName(name), JSON.stringify(val), { expires: 999, path: '/' });
-			emit("valueChanged");
+			this.emit("valueChanged", { name: name, value: val });
 		};
 
 		Store.prototype.getValue = function (name) {
-			return JSON.parse($.cookie(getName(name)));
+			var val = $.cookie(getName(name));
+			return val ? JSON.parse(val) : {};
 		};
-		
+
 		Store.prototype.on = function (event, callback) {
 			this.events[event] = callback;
 		};
 
-		function getName(name) {
-			return PREFIX + name;
-		}
-
-		function emit(event, data) {
+		Store.prototype.emit = function (event, data) {
 			if (this.events[event]) {
 				this.events[event](data);
 			}
+		};
+
+		function getName(name) {
+			return PREFIX + name;
 		}
 
 		return Store;

@@ -2,18 +2,39 @@
   function (ko, Terminal, Store) {
   	function ViewModel() {
 
+  		var _store = new Store();
   		this.terminals = ko.observableArray();
   		this.selectedTerminal = ko.observable().extend({ notify: 'always' });
+
+  		
+  		this.savedTerminals = ko.observable(_store.getValue("terminals"));
+  		_store.on("valueChanged", function (data) {
+  			if (data.name === "terminals") {
+  				this.savedTerminals(data.value);
+  			}
+  		}.bind(this));
+
+  		this.savedTerminalNames = ko.computed(function () {
+  			return Object.keys(this.savedTerminals());
+  		}, this);
+
+
+  		this.addTerminal = function (terminalData) {
+  			var terminal = new Terminal(_store, terminalData);
+  			this.terminals.push(terminal);
+  			this.selectedTerminal(terminal);
+  		};
+
+  		this.loadTerminalByName = function (name) {
+  			var terminal = this.savedTerminals[name];
+  			if (terminal) {
+  				this.addTerminal(terminal);
+  			}
+  		};
 
   		this.addTerminal();
 
   	}
-
-  	ViewModel.prototype.addTerminal = function () {
-  		var terminal = new Terminal();
-  		this.terminals.push(terminal);
-  		this.selectedTerminal(terminal);
-  	};
 
   	ViewModel.prototype.select = function (terminal) {
   		this.selectedTerminal(terminal);

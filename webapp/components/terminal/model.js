@@ -1,10 +1,11 @@
 define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
   function (ko, _, hub, Store) {
-  	function ViewModel() {
+  	function ViewModel(store, data) {
+  		data = data || {};
 
   		this.id = _.uniqueId("terminal--");
-  		this.nickname = ko.observable("");
-  		this.path = ko.observable();
+  		this.nickname = ko.observable(data.nickname || "");
+  		this.path = ko.observable(data.path || "");
   		this.command = ko.observable();
   		this.commands = ko.observableArray();
   		this.previousCommandIndex = ko.observable(-1);
@@ -15,11 +16,9 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
   		this.isLoaded = ko.observable(true);
   		this.isLoading = ko.observable(false);
   		this.selected = ko.observable(false).extend({ notify: 'always' });
-  		var _store = new Store();
+  		var _store = store || new Store();
 		
-  		this.editableOptions = {
-  			save: this.save
-  		};
+  		
 
   		this.getPreviousCommand = function () {
   			if (this.commands().length && (this.commands().length - 1) >= this.previousCommandIndex() + 1) {
@@ -52,6 +51,10 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
   			terminals[term.nickname] = term;
 
   			_store.setValue("terminals", terminals);
+  		}.bind(this);
+
+  		this.editableOptions = {
+  			save: this.save
   		};
 
   		this.load();
@@ -61,7 +64,7 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
   	ViewModel.prototype.load = function () {
   		this.isLoading(true);
   		$.ajax({
-  			url: "api/terminal/",
+  			url: "api/terminal/" + this.path(),
   			type: "GET",
   			context: this
   		}).done(function (data) {
@@ -72,7 +75,9 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
   					var arr = data.stdout.split("\n");
   					var str = arr[arr.length - 1];
   					this.path(str.substring(0, str.length - 1)); //remove the gt
-  					this.nickname(this.path());
+  					if (!this.nickname()) {
+  						this.nickname(this.path());
+  					}
   					this.isLoading(false);
   					this.isLoaded(true);
   				}
