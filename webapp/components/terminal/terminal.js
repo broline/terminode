@@ -26,9 +26,6 @@ define(['knockout', 'jquery', './model', 'socket.io',
 
     			$input.keydown(function (event) {
     				if (event.which === 13) { //enter
-    					if (viewModel.command() === "cls") {
-    						viewModel.clear();
-    					}
     					viewModel.submit();
     				}
     				if (event.which === 38) { //up arrow

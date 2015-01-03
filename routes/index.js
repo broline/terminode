@@ -13,10 +13,11 @@ router.get('/api/terminal/:path?', function (req, res, next) {
 
 		var io = require('socket.io')(port);
 
-		var arg = req.params.path ? '/K "cd ' + req.params.path + '"' : "";
+		var args = req.params.path ? ["/k", "cd " + req.params.path] : [];
+		console.log(args);
 		io.on('connection', function (socket) {
 			var prc = require('child_process');
-			cmd = prc.spawn('cmd', [arg]);
+			cmd = prc.spawn('cmd', args);
 			cmd.stdout.on("data", function (data) {
 				var dat = String.fromCharCode.apply(null, new Uint16Array(data));
 				socket.emit('server', { stdout: dat });

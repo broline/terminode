@@ -26,7 +26,7 @@
   		};
 
   		this.loadTerminalByName = function (name) {
-  			var terminal = this.savedTerminals[name];
+  			var terminal = this.savedTerminals()[name];
   			if (terminal) {
   				this.addTerminal(terminal);
   			}

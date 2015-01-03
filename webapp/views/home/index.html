@@ -1,3 +1,5 @@
+<!-- Split button -->
+
 <ul class="nav nav-tabs">
 	{{#foreach terminals}}
 	<li role="presentation" class="{{($parent.selectedTerminal() && $parent.selectedTerminal().id === id) ? 'active' : ''}}">
@@ -5,17 +7,29 @@
 		{{#if !isLoading()}}<a data-bind="click: $parent.select($data)" href="#">{{nickname}} <span data-bind="click: function(){$parent.remove($data);}"><i class="fa fa-times fa-2"></i></span></a>{{/if}}
 	</li>
 	{{/foreach}}
-	<li role="presentation"><a data-bind="click: addTerminal" href="#">New <i class="fa fa-plus fa-2"></i></a></li>
+	<li role="presentation">
+		<a data-bind="click: addTerminal" href="#">
+			New <i class="fa fa-plus fa-2"></i>
+		</a>
+	</li>
+	{{#if savedTerminals}}
+	<li role="presentation">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+			<span>Open <i class="fa fa-folder-open fa-2"></i></span>
+			<span class="sr-only">Toggle Dropdown</span>
+		</a>
+		<ul class="dropdown-menu" role="menu">
+			{{#foreach savedTerminalNames}}
+			<li><a href="#" data-bind="click: $parent.loadTerminalByName.bind($parent, $data)">{{$data}}</a></li>
+			{{/foreach}}
+			<li class="divider"></li>
+			<li><a href="#">Search</a></li>
+		</ul>
+	</li>
+	{{/if}}
 </ul>
 
 {{#if selectedTerminal}}
 <div data-bind="terminal: selectedTerminal"></div>
 {{/if}}
 
-{{#if savedTerminals}}
-<ul>
-	{{#foreach savedTerminalNames}}
-	<li>{{$data}}</li>
-	{{/foreach}}
-</ul>
-{{/if}}

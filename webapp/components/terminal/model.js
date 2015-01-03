@@ -1,5 +1,5 @@
-define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
-  function (ko, _, hub, Store) {
+define(["knockout", 'lodash', 'webapp/hub', 'webapp/store', './platform-factory'],
+  function (ko, _, hub, Store, factory) {
   	function ViewModel(store, data) {
   		data = data || {};
 
@@ -13,9 +13,10 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
   		this.port = ko.observable();
   		this.socket = ko.observable();
   		this.reconnectAttempts = ko.observable(0);
-  		this.isLoaded = ko.observable(true);
+  		this.isLoaded = ko.observable(false);
   		this.isLoading = ko.observable(false);
   		this.selected = ko.observable(false).extend({ notify: 'always' });
+  		this.platform = null;
   		var _store = store || new Store();
 		
   		
@@ -64,20 +65,33 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
   	ViewModel.prototype.load = function () {
   		this.isLoading(true);
   		$.ajax({
-  			url: "api/terminal/" + this.path(),
+  			url: "api/terminal/" + (this.path() ? encodeURIComponent(this.path()) : ""),
   			type: "GET",
   			context: this
   		}).done(function (data) {
   			this.port(data.port);
   			this.socket(hub.connect(this.port()));
+
   			hub.registerEvent(this.socket(), 'server', function (data) {
-  				if (!this.nickname() && data.stdout && data.stdout.indexOf(">", this.length - 1) !== -1) {
-  					var arr = data.stdout.split("\n");
-  					var str = arr[arr.length - 1];
-  					this.path(str.substring(0, str.length - 1)); //remove the gt
+  				if (!this.platform) {
+  					this.platform = factory.getPlatform(data.platform);
+  				}
+  				var arr = data.stdout.split("\n");
+  				var lastLine = arr[arr.length - 1];
+  				var isLastLineTheEnd = (data.stdout && data.stdout.indexOf(this.platform.endDelimiter, this.length - 1) !== -1);
+  				var isLastCommandChangeDirectory = (this.commands()[0] && (this.commands()[0].split(" ")[0] === this.platform.commands.changeDirectory));
+
+  				
+  				if (isLastCommandChangeDirectory || (isLastLineTheEnd && !this.path())) {
+  					//if last command was change directory, or theres no nickname yet, change path/nickname and save
+  					this.path(lastLine.substring(0, lastLine.length - 1)); //remove the gt
   					if (!this.nickname()) {
   						this.nickname(this.path());
   					}
+  					this.save();
+  				}
+  				if (!this.isLoaded() && isLastLineTheEnd) {
+  					//if not loded and ther is a response from server with the end delimiter signaling that the terminal is ready for use
   					this.isLoading(false);
   					this.isLoaded(true);
   				}
@@ -98,6 +112,9 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
   	};
 
   	ViewModel.prototype.submit = function () {
+  		if (this.platform && (this.command() === this.platform.commands.clear)) {
+  			this.clear();
+  		}
   		hub.raiseClientEvent(this.socket(), "command", this.command());
   		this.commands.unshift(this.command());
   		this.previousCommandIndex(-1);
