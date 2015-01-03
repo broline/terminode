@@ -1,5 +1,5 @@
-﻿define(["knockout", 'webapp/components/terminal/model'],
-  function (ko, Terminal) {
+﻿define(["knockout", 'webapp/components/terminal/model', 'webapp/store'],
+  function (ko, Terminal, Store) {
   	function ViewModel() {
 
   		this.terminals = ko.observableArray();

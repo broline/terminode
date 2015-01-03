@@ -3,7 +3,7 @@
 		<div class="panel-heading">
 			<h4>
 				{{#if isLoading()}}<span>Loading...</span>{{/if}}
-				{{#if !isLoading()}}<span data-bind="editable: nickname" title="{{port}}"></span>{{/if}}
+				{{#if !isLoading()}}<span data-bind="editable: nickname, editableOptions: editableOptions" title="{{port}}"></span>{{/if}}
 			</h4>
 		</div>
 		<div class="panel-body">

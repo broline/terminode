@@ -4,21 +4,33 @@
 
 		var PREFIX = "terminode_";
 
+		function Store() {
+			this.events = [];
+		}
+
+		Store.prototype.setValue = function (name, val) {
+			$.cookie(getName(name), JSON.stringify(val), { expires: 999, path: '/' });
+			emit("valueChanged");
+		};
+
+		Store.prototype.getValue = function (name) {
+			return JSON.parse($.cookie(getName(name)));
+		};
+		
+		Store.prototype.on = function (event, callback) {
+			this.events[event] = callback;
+		};
+
 		function getName(name) {
 			return PREFIX + name;
 		}
 
-		function setValue(name, val) {
-			$.cookie(getName(name), val, { expires: 999, path: '/' });
+		function emit(event, data) {
+			if (this.events[event]) {
+				this.events[event](data);
+			}
 		}
 
-		function getValue(name) {
-			return $.cookie(getName(name));
-		}
-
-		return {
-			getValue: getValue,
-			setValue: setValue
-		};
+		return Store;
 
 	});

@@ -1,5 +1,5 @@
-define(["knockout", 'lodash', 'webapp/hub','webapp/store'],
-  function (ko, _, hub, store) {
+define(["knockout", 'lodash', 'webapp/hub', 'webapp/store'],
+  function (ko, _, hub, Store) {
   	function ViewModel() {
 
   		this.id = _.uniqueId("terminal--");
@@ -15,6 +15,11 @@ define(["knockout", 'lodash', 'webapp/hub','webapp/store'],
   		this.isLoaded = ko.observable(true);
   		this.isLoading = ko.observable(false);
   		this.selected = ko.observable(false).extend({ notify: 'always' });
+  		var _store = new Store();
+		
+  		this.editableOptions = {
+  			save: this.save
+  		};
 
   		this.getPreviousCommand = function () {
   			if (this.commands().length && (this.commands().length - 1) >= this.previousCommandIndex() + 1) {
@@ -34,6 +39,21 @@ define(["knockout", 'lodash', 'webapp/hub','webapp/store'],
   			}
   		}.bind(this);
 
+  		this.save = function () {
+  			var terminals = _store.getValue("terminals");
+  			if (!terminals) {
+  				terminals = {};
+  			}
+  			var term = {
+  				nickname: this.nickname(),
+  				path: this.path()
+  			};
+
+  			terminals[term.nickname] = term;
+
+  			_store.setValue("terminals", terminals);
+  		};
+
   		this.load();
 
   	}
@@ -43,11 +63,11 @@ define(["knockout", 'lodash', 'webapp/hub','webapp/store'],
   		$.ajax({
   			url: "api/terminal/",
   			type: "GET",
-			context: this
+  			context: this
   		}).done(function (data) {
   			this.port(data.port);
   			this.socket(hub.connect(this.port()));
-			hub.registerEvent(this.socket(),'server',function(data){
+  			hub.registerEvent(this.socket(), 'server', function (data) {
   				if (!this.nickname() && data.stdout && data.stdout.indexOf(">", this.length - 1) !== -1) {
   					var arr = data.stdout.split("\n");
   					var str = arr[arr.length - 1];
@@ -58,7 +78,7 @@ define(["knockout", 'lodash', 'webapp/hub','webapp/store'],
   				}
   				this.output(this.output() + data.stdout);
   			}.bind(this));
-			hub.registerEvent(this.socket(),'connect_error reconnect_error', function (data) {
+  			hub.registerEvent(this.socket(), 'connect_error reconnect_error', function (data) {
   				this.reconnectAttempts(this.reconnectAttempts + 1);
   				if (this.reconnectAttempts >= 3) {
   					this.load();
@@ -70,24 +90,6 @@ define(["knockout", 'lodash', 'webapp/hub','webapp/store'],
 
   	ViewModel.prototype.clear = function () {
   		this.output("");
-  	};
-
-  	ViewModel.prototype.save = function () {
-  		var terminals = store.getValue("terminals");
-  		if (!terminals || !JSON.parse(terminals)) {
-  			terminals = [];
-  		}
-  		var term = {
-  			nickName: this.nickName(),
-  			path: this.path()
-  		};
-  		if ($.inArray(term.nickName, terminals)) {
-  			terminals[term.nickName] = term;
-  		} else {
-  			terminals.push(term.nickName, term);
-  		}
-
-  		store.setValue("terminals", terminals);
   	};
 
   	ViewModel.prototype.submit = function () {

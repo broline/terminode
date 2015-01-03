@@ -1,11 +1,12 @@
 define(["knockout", "../model", "webapp/hub", "webapp/store",
         "mock-ajax"
 ],
-    function (ko, ViewModel, hub, store) {
+    function (ko, ViewModel, hub, Store) {
     	describe("terminal binding model", function () {
 
     		var model;
     		var initialResponse = "hello>";
+    		var store = new Store();
 
     		beforeEach(function () {
     			jasmine.Ajax.install();
@@ -61,7 +62,35 @@ define(["knockout", "../model", "webapp/hub", "webapp/store",
     					it("should have output", function () {
     						expect(model.output()).toEqual(initialResponse);
     					});
+
+    					describe("and then saving terminal with this nickname for the first time", function () {
+    						var terminals;
+    						beforeEach(function () {
+    							model.save();
+    							terminals = store.getValue("terminals");
+    						});
+
+    						it("should have saved the terminal", function () {
+    							expect(terminals[model.nickname()].path).toEqual("hello");
+    						});
+
+    						describe("and then changing the name and saving again", function () {
+
+    							beforeEach(function () {
+    								model.nickname("a good ol name");
+    								model.path("new path");
+    								model.save();
+    							});
+
+    							it("should have added a new entry with that name", function () {
+    								expect(terminals[model.nickname()].path).toEqual("new path");
+    								expect(Object.keys(terminals).length).toEqual(2);
+    							});
+    						});
+    					});
+
     				});
+
 
     				describe("then entering a command", function () {
 

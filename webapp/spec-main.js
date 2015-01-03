@@ -6,18 +6,34 @@ define('webapp/store', [], function () {
 	//in memory stub
 	var values = [];
 	var PREFIX = "terminode_";
-	function setValue(name, val) {
+
+	function Store() {
+		this.events = [];
+	}
+
+	Store.prototype.setValue = function (name, val) {
 		values[PREFIX + name] = val;
-	}
-
-	function getValue(name) {
-		return values[PREFIX + name];
-	}
-
-	return {
-		getValue: getValue,
-		setValue: setValue
 	};
+
+	Store.prototype.getValue = function (name) {
+		return values[PREFIX + name];
+	};
+
+	Store.prototype.on = function (event, callback) {
+		this.events[event] = callback;
+	};
+
+	function getName(name) {
+		return PREFIX + name;
+	}
+
+	function emit(event, data) {
+		if (this.events[event]) {
+			this.events[event](data);
+		}
+	}
+
+	return Store;
 });
 
 define('webapp/hub', [], function () {
