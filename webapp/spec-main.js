@@ -16,7 +16,7 @@ define('webapp/store', [], function () {
 	};
 
 	Store.prototype.getValue = function (name) {
-		return values[PREFIX + name];
+		return values[PREFIX + name] || {};
 	};
 
 	Store.prototype.on = function (event, callback) {

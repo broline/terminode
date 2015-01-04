@@ -21,7 +21,8 @@ module.exports = function(grunt) {
     var config = {
         webApp: 'webapp',
         app: '..',
-        dist: 'webapp/dist'
+        dist: 'webapp/dist',
+		dev: 'webapp/dev'
     };
 
     // Define the configuration for all the tasks
@@ -89,8 +90,8 @@ module.exports = function(grunt) {
                 files: [{
                     dot: true,
                     src: [
-                        '<%= config.dist %>/*',
-                        '!<%= config.dist %>/.git*'
+                        '<%= config.dev %>/*',
+                        '!<%= config.dev %>/.git*'
                     ]
                 }]
             }

@@ -1,8 +1,8 @@
 ﻿define(["knockout", 'webapp/components/terminal/model', 'webapp/store'],
   function (ko, Terminal, Store) {
-  	function ViewModel() {
+  	function ViewModel(store) {
 
-  		var _store = new Store();
+  		var _store = store || new Store();
   		this.terminals = ko.observableArray();
   		this.selectedTerminal = ko.observable().extend({ notify: 'always' });
 
@@ -23,6 +23,7 @@
   			var terminal = new Terminal(_store, terminalData);
   			this.terminals.push(terminal);
   			this.selectedTerminal(terminal);
+  			return terminal;
   		};
 
   		this.loadTerminalByName = function (name) {
