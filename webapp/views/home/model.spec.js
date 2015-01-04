@@ -17,6 +17,7 @@
 
     		afterEach(function () {
     			jasmine.Ajax.uninstall();
+    			
     		});
 
     		describe("when creating a new viewmodel", function () {
@@ -36,9 +37,8 @@
     			describe("and there are saved terminals", function () {
 
     				beforeEach(function () {
-
     					store.setValue("terminals", null);
-    			
+
     					terminal1.nickname("one");
     					terminal1.path("path1");
     					terminal1.save();
@@ -49,7 +49,7 @@
     				});
 
     				it("should recognize the saved terminals", function () {
-    					expect(Object.keys(model.savedTerminals()).length).toEqual(2);
+    					expect(model.savedTerminals().length).toEqual(2);
     				});
 
     				it("should have list of saved terminal names", function () {

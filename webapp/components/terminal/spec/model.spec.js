@@ -1,7 +1,7 @@
-define(["knockout", "../model", "webapp/hub", "webapp/store",
+define(["knockout", "lodash", "../model", "webapp/hub", "webapp/store",
         "mock-ajax"
 ],
-    function (ko, ViewModel, hub, Store) {
+    function (ko, _, ViewModel, hub, Store) {
     	describe("terminal binding model", function () {
 
     		var model;
@@ -66,12 +66,13 @@ define(["knockout", "../model", "webapp/hub", "webapp/store",
     					describe("and then saving terminal with this nickname for the first time", function () {
     						var terminals;
     						beforeEach(function () {
+    							store.setValue("terminals", null);
     							model.save();
     							terminals = store.getValue("terminals");
     						});
 
     						it("should have saved the terminal", function () {
-    							expect(terminals[model.nickname()].path).toEqual("hello");
+    							expect(_.find(terminals, function (term) { return term.nickname === model.nickname(); }).path).toEqual("hello");
     						});
 
     						describe("and then changing the name and saving again", function () {
@@ -83,8 +84,22 @@ define(["knockout", "../model", "webapp/hub", "webapp/store",
     							});
 
     							it("should have added a new entry with that name", function () {
-    								expect(terminals[model.nickname()].path).toEqual("new path");
-    								expect(Object.keys(terminals).length).toEqual(2);
+    								expect(_.find(terminals, function (term) { return term.nickname === model.nickname(); }).path).toEqual("new path");
+    								expect(terminals.length).toEqual(2);
+    							});
+
+    							describe("and then changing the path", function () {
+
+    								beforeEach(function () {
+    									model.nickname("a good ol name");
+    									model.path("another new path");
+    									model.save();
+    								});
+
+    								it("should have modified the existing entry", function () {
+    									expect(_.find(terminals, function (term) { return term.nickname === model.nickname(); }).path).toEqual("another new path");
+    									expect(terminals.length).toEqual(2);
+    								});
     							});
     						});
     					});

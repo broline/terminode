@@ -1,12 +1,12 @@
-﻿define(["knockout", 'webapp/components/terminal/model', 'webapp/store'],
-  function (ko, Terminal, Store) {
+﻿define(["knockout", 'lodash', 'webapp/components/terminal/model', 'webapp/store'],
+  function (ko, _, Terminal, Store) {
   	function ViewModel(store) {
 
   		var _store = store || new Store();
   		this.terminals = ko.observableArray();
   		this.selectedTerminal = ko.observable().extend({ notify: 'always' });
 
-  		
+
   		this.savedTerminals = ko.observable(_store.getValue("terminals"));
   		_store.on("valueChanged", function (data) {
   			if (data.name === "terminals") {
@@ -15,7 +15,9 @@
   		}.bind(this));
 
   		this.savedTerminalNames = ko.computed(function () {
-  			return Object.keys(this.savedTerminals());
+  			return _.map(this.savedTerminals(), function (data) {
+  				return data.nickname;
+  			});
   		}, this);
 
 
@@ -27,7 +29,7 @@
   		};
 
   		this.loadTerminalByName = function (name) {
-  			var terminal = this.savedTerminals()[name];
+  			var terminal = _.first(_.where(this.savedTerminals(), {nickname: name}));
   			if (terminal) {
   				this.addTerminal(terminal);
   			}

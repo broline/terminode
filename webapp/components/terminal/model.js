@@ -41,15 +41,23 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store', './platform-factory'
 
   		this.save = function () {
   			var terminals = _store.getValue("terminals");
-  			if (!terminals) {
-  				terminals = {};
+  			if (!terminals || !Array.isArray(terminals)) {
+  				terminals = [];
   			}
   			var term = {
   				nickname: this.nickname(),
   				path: this.path()
   			};
 
-  			terminals[term.nickname] = term;
+  			var savedTerminal = _.first(_.where(terminals, {nickname: this.nickname()}));
+  			if (savedTerminal) {
+  				var idx = _.findIndex(terminals, function (terminal) {
+  					return terminal.nickname === this.nickname();
+  				}.bind(this));
+  				terminals[idx] = term;
+  			} else {
+  				terminals.push(term);
+  			}
 
   			_store.setValue("terminals", terminals);
   		}.bind(this);
@@ -76,13 +84,13 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store', './platform-factory'
   				if (!this.platform) {
   					this.platform = factory.getPlatform(data.platform);
   				}
-  				var arr = data.stdout.split("\n");
+  				var arr = _.compact(data.stdout.split("\n"));
   				var lastLine = arr[arr.length - 1];
   				var isLastLineTheEnd = (data.stdout && data.stdout.indexOf(this.platform.endDelimiter, this.length - 1) !== -1);
   				var isLastCommandChangeDirectory = (this.commands()[0] && (this.commands()[0].split(" ")[0] === this.platform.commands.changeDirectory));
 
   				
-  				if (isLastCommandChangeDirectory || (isLastLineTheEnd && !this.path())) {
+  				if ((isLastCommandChangeDirectory && isLastLineTheEnd )|| (isLastLineTheEnd && !this.path())) {
   					//if last command was change directory, or theres no nickname yet, change path/nickname and save
   					this.path(lastLine.substring(0, lastLine.length - 1)); //remove the gt
   					if (!this.nickname()) {
