@@ -17,7 +17,7 @@ router.get('/api/terminal/:path?', function (req, res, next) {
 		console.log(args);
 		io.on('connection', function (socket) {
 			var prc = require('child_process');
-			cmd = prc.spawn('cmd', args);
+			var cmd = prc.spawn('cmd', args);
 			cmd.stdout.on("data", function (data) {
 				var dat = String.fromCharCode.apply(null, new Uint16Array(data));
 				socket.emit('server', { stdout: dat });
