@@ -48,6 +48,7 @@
   	ViewModel.prototype.remove = function (terminal) {
   		var idx = this.terminals.indexOf(terminal);
   		this.terminals.remove(terminal);
+  		terminal.close();
   		terminal = null;
   		if (idx && this.terminals()[idx - 1]) {
   			this.select(this.terminals()[idx - 1]);

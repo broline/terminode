@@ -29,6 +29,14 @@ router.get('/api/terminal/:path?', function (req, res, next) {
 			socket.on('command', function (command) {
 				cmd.stdin.write(command + "\n");
 			});
+
+			socket.on('close', function () {
+				cmd.kill();
+			});
+
+			socket.on('disconnect', function () {
+				cmd.kill();
+			});
 		});
 
 		res.send({ port: port });

@@ -129,5 +129,9 @@ define(["knockout", 'lodash', 'webapp/hub', 'webapp/store', './platform-factory'
   		this.command("");
   	};
 
+  	ViewModel.prototype.close = function () {
+  		hub.raiseClientEvent(this.socket(), "close");
+  	};
+
   	return ViewModel;
   });
